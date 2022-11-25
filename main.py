@@ -13,8 +13,10 @@ def ShowAllDatabase():
 
     with io.open('database.csv', encoding='utf-8') as csv_file:
         file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
+        LineCounter = 0
         for row in file_reader:
-            print(row)
+            print(f'{LineCounter} ::: {row}')
+            LineCounter += 1
 
 #Просмотр базы данных по источнику
 def ShowDatabaseBySource():
@@ -37,9 +39,10 @@ def ShowDatabaseBySource():
     with io.open('database.csv', encoding='utf-8') as csv_file:
         file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
 
+        LineCounter = 0
         for row in file_reader:
             if row[5] == AllSourceList[SourceNum]:
-                print(row)
+                print(f'{LineCounter} ::: {row}')
 
 #Поиск совпадений по всем источникам
 def SearchAllDatabase():
@@ -104,6 +107,7 @@ def SearchAllDatabase():
         print('5 - Вывести список ученых')
         print('6 - Вывести список источников')
         print('7 - Вывести список связанных технологий')
+        print('8 - Выгрузить результаты в файл')
         print('0 - Вернуться в главное меню')
 
         SearchCounter = int(input('Введите номер пункта: '))
@@ -136,6 +140,33 @@ def SearchAllDatabase():
             print('Связанные технологии:')
             for i in range(0, len(SearchConnectTechnologiesList)):
                 print(SearchConnectTechnologiesList[i])
+        elif SearchCounter == 8:
+            OutCounterList = []
+            OutList = []
+            OutCounterList.append(int(input('Записывать технологии? (1/0): ')))
+            OutCounterList.append(int(input('Записывать домены? (1/0): ')))
+            OutCounterList.append(int(input('Записывать функции? (1/0): ')))
+            OutCounterList.append(int(input('Записывать атрибуты? (1/0): ')))
+            OutCounterList.append(int(input('Записывать ученых? (1/0): ')))
+            OutCounterList.append(int(input('Записывать источники? (1/0): ')))
+            OutCounterList.append(int(input('Записывать связанные технологии? (1/0): ')))
+            if OutCounterList[0] == 1:
+                OutList = OutList + SearchTechnologyList
+            if OutCounterList[1] == 1:
+                OutList = OutList + SearchDomainList
+            if OutCounterList[2] == 1:
+                OutList = OutList + SearchFuncList
+            if OutCounterList[3] == 1:
+                OutList = OutList + SearchAtributeList
+            if OutCounterList[4] == 1:
+                OutList = OutList + SearchScientistList
+            if OutCounterList[5] == 1:
+                OutList = OutList + SearchSourceList
+            if OutCounterList[6] == 1:
+                OutList = OutList + SearchConnectTechnologiesList
+
+            WritingListToFile(OutList)
+
         elif SearchCounter == 0:
             break
         else:
@@ -219,6 +250,7 @@ def SearchBySource():
         print('5 - Вывести список ученых')
         print('6 - Вывести список источников')
         print('7 - Вывести список связанных технологий')
+        print('8 - Выгрузить результаты в текстовый файл')
         print('0 - Вернуться в главное меню')
 
         SearchCounter = int(input('Введите номер пункта: '))
@@ -251,14 +283,44 @@ def SearchBySource():
             print('Связанные технологии:')
             for i in range(0, len(SearchConnectTechnologiesList)):
                 print(SearchConnectTechnologiesList[i])
+        elif SearchCounter == 8:
+
+            OutCounterList = []
+            OutList = []
+            OutCounterList.append(int(input('Записывать технологии? (1/0): ')))
+            OutCounterList.append(int(input('Записывать домены? (1/0): ')))
+            OutCounterList.append(int(input('Записывать функции? (1/0): ')))
+            OutCounterList.append(int(input('Записывать атрибуты? (1/0): ')))
+            OutCounterList.append(int(input('Записывать ученых? (1/0): ')))
+            OutCounterList.append(int(input('Записывать источники? (1/0): ')))
+            OutCounterList.append(int(input('Записывать связанные технологии? (1/0): ')))
+            if OutCounterList[0] == 1:
+                OutList = OutList + SearchTechnologyList
+            if OutCounterList[1] == 1:
+                OutList = OutList + SearchDomainList
+            if OutCounterList[2] == 1:
+                OutList = OutList + SearchFuncList
+            if OutCounterList[3] == 1:
+                OutList = OutList + SearchAtributeList
+            if OutCounterList[4] == 1:
+                OutList = OutList + SearchScientistList
+            if OutCounterList[5] == 1:
+                OutList = OutList + SearchSourceList
+            if OutCounterList[6] == 1:
+                OutList = OutList + SearchConnectTechnologiesList
+
+            WritingListToFile(OutList)
+
         elif SearchCounter == 0:
             break
         else:
             print('Пожалуйста, проверьте корректность ввода')
 
 #Выгрузка результатов поиска в текстовый файл
-def WritingResultsToFile():
-    print('Write')
+def WritingListToFile(List):
+    with open("result.txt", "w") as file:
+        for line in List:
+            file.write(line + '\n')
 
 #Добавление записей в csv файл
 def AddNewEntry():
@@ -281,7 +343,6 @@ def AddNewEntry():
     with io.open('database.csv', mode= 'a', encoding='utf-8') as w_file:
         file_writer = csv.writer(w_file, delimiter = '|', lineterminator="\r")
         file_writer.writerow(AddList)
-
 
 #Поиск совпадение по csv файлу
 def SearchForMatches():
@@ -321,14 +382,42 @@ def ShowDatabase():
         else:
             print('Пожалуйста, проверьте корректность ввода')
 
+#Внести изменения в существующую строку csv файла
+def UpdateCsvRow():
+    ShowAllDatabase()
+
+    RowNumber = int(input('Введите номер строки: '))
+    with io.open('database.csv', 'r', encoding='utf-8') as csv_file:
+        file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
+        Lines = []
+        AddList = []
+        RowCounter = 0
+        for row in file_reader:
+            if RowCounter == RowNumber:
+                AddList.append(str(input('Введите название технологии: ')))
+                AddList.append(str(input('Введите домены: ')))
+                AddList.append(str(input('Введите функции: ')))
+                AddList.append(str(input('Введите атрибуты: ')))
+                AddList.append(str(input('Введите ученых: ')))
+                AddList.append(str(input('Введите источники: ')))
+                AddList.append(str(input('Введите связанные технологии: ')))
+                Lines.append(AddList)
+            else:
+                Lines.append(row)
+            RowCounter += 1
+    with io.open('database.csv', 'w', encoding='utf-8') as csv_file:
+        csv.writer(csv_file, delimiter='|').writerows(Lines)
+
 #Главная исполняемая функция
 def main():
     print('Программа НИО МАИ 317 по поиску технологий')
 
-
-
     while True:
-        print('1 - Найти совпадению по атрибутам\n2 - Добавить новую запись\n3 - Показать базу данных\n0 - выйти из программы')
+        print('1 - Найти совпадению по атрибутам')
+        print('2 - Добавить новую запись')
+        print('3 - Показать базу данных')
+        print('4 - внести изменения в базу данных')
+        print('0 - выйти из программы')
 
         FirstCounter = int(input('Введите цифорку: '))
 
@@ -338,11 +427,12 @@ def main():
             AddNewEntry()
         elif FirstCounter == 3:
             ShowDatabase()
+        elif FirstCounter == 4:
+            UpdateCsvRow()
         elif FirstCounter == 0:
             break
         else:
             print('Пожалуйста, проверьте корректность ввода')
-
 
 if __name__ == '__main__':
     main()
