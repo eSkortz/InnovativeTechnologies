@@ -5,6 +5,7 @@
 import io
 import csv
 import colorama
+from colorama import Fore, Back, Style
 
 colorama.init()
 
@@ -15,7 +16,7 @@ def ShowAllDatabase():
         file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
         LineCounter = 0
         for row in file_reader:
-            print(f'{LineCounter} ::: {row}')
+            print(Fore.LIGHTWHITE_EX, f'{LineCounter} ::: {row}')
             LineCounter += 1
 
 #Просмотр базы данных по источнику
@@ -30,10 +31,12 @@ def ShowDatabaseBySource():
             if row[5] not in AllSourceList:
                 AllSourceList.append(row[5])
 
+        print(Fore.LIGHTWHITE_EX)
         print('Список источников:')
         for i in range(0, len(AllSourceList)):
             print(f'{i+1} - {AllSourceList[i]}')
 
+        print(Fore.LIGHTGREEN_EX)
         SourceNum = int(input('Введите номер источника: ')) - 1
 
     with io.open('database.csv', encoding='utf-8') as csv_file:
@@ -42,19 +45,22 @@ def ShowDatabaseBySource():
         LineCounter = 0
         for row in file_reader:
             if row[5] == AllSourceList[SourceNum]:
-                print(f'{LineCounter} ::: {row}')
+                print(Fore.LIGHTWHITE_EX, f'{LineCounter} ::: {row}')
 
 #Поиск совпадений по всем источникам
 def SearchAllDatabase():
 
+    print(Fore.LIGHTGREEN_EX)
     SearchTag = str(input('Введите тег для поиска: '))
 
-    print('Выборка совпадений из базы данных: ')
+    print(Fore.LIGHTWHITE_EX, 'Выборка совпадений из базы данных: ')
     with io.open('database.csv', encoding='utf-8') as csv_file:
         file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
+        LineCounter = 0
         for row in file_reader:
             if SearchTag in str(row):
-                print(row)
+                print(f'{LineCounter} ::: {row}')
+                LineCounter += 1
 
     SearchTechnologyList = []
     SearchDomainList = []
@@ -99,47 +105,49 @@ def SearchAllDatabase():
                         SearchConnectTechnologiesList.append(ConnectTechnologiesList[i])
 
     while True:
+        print(Fore.LIGHTBLUE_EX)
+        print('Вывести список технологий - 1')
+        print('Вывести список доменов - 2')
+        print('Вывести список функций - 3')
+        print('Вывести список атрибутов - 4')
+        print('Вывести список ученых - 5')
+        print('Вывести список источников - 6')
+        print('Вывести список связанных технологий - 7')
+        print('Выгрузить результаты в текстовый файл - 8')
+        print('Вернуться в главное меню - 0')
 
-        print('1 - Вывести список технологий')
-        print('2 - Вывести список доменов')
-        print('3 - Вывести список функций')
-        print('4 - Вывести список атрибутов')
-        print('5 - Вывести список ученых')
-        print('6 - Вывести список источников')
-        print('7 - Вывести список связанных технологий')
-        print('8 - Выгрузить результаты в файл')
-        print('0 - Вернуться в главное меню')
-
+        print(Fore.LIGHTGREEN_EX)
         SearchCounter = int(input('Введите номер пункта: '))
 
+        print(Fore.LIGHTWHITE_EX)
         if SearchCounter == 1:
             print('Технологии:')
             for i in range(0, len(SearchTechnologyList)):
-                print(SearchTechnologyList[i])
+                print(f'{i} ::: {SearchTechnologyList[i]}')
         elif SearchCounter == 2:
             print('Домены:')
             for i in range(0, len(SearchDomainList)):
-                print(SearchDomainList[i])
+                print(f'{i} ::: {SearchDomainList[i]}')
         elif SearchCounter == 3:
             print('Функции')
             for i in range(0, len(SearchFuncList)):
-                print(SearchFuncList[i])
+                print(f'{i} ::: {SearchFuncList[i]}')
         elif SearchCounter == 4:
             print('Атрибуты:')
             for i in range(0, len(SearchAtributeList)):
-                print(SearchAtributeList[i])
+                print(f'{i} ::: {SearchAtributeList[i]}')
         elif SearchCounter == 5:
             print('Ученые:')
             for i in range(0, len(SearchScientistList)):
-                print(SearchScientistList[i])
+                print(f'{i} ::: {SearchScientistList[i]}')
         elif SearchCounter == 6:
             print('Источники:')
             for i in range(0, len(SearchSourceList)):
-                print(SearchSourceList[i])
+                print(f'{i} ::: {SearchSourceList[i]}')
         elif SearchCounter == 7:
             print('Связанные технологии:')
             for i in range(0, len(SearchConnectTechnologiesList)):
-                print(SearchConnectTechnologiesList[i])
+                print(f'{i} ::: {SearchConnectTechnologiesList[i]}')
         elif SearchCounter == 8:
             OutCounterList = []
             OutList = []
@@ -188,16 +196,18 @@ def SearchBySource():
 
         print('Список источников:')
         for i in range(0, len(AllSourceList)):
-            print(f'{i+1} - {AllSourceList[i]}')
+            print(f'{AllSourceList[i]} - {i+1}')
 
         SourceNum = int(input('Введите номер источника: ')) - 1
 
     print('Выборка совпадений из базы данных: ')
     with io.open('database.csv', encoding='utf-8') as csv_file:
         file_reader = csv.reader(csv_file, delimiter="|", quoting=csv.QUOTE_NONE)
+        LineCounter = 0
         for row in file_reader:
             if row[5] == AllSourceList[SourceNum] and SearchTag in str(row):
-                print(row)
+                print(f'{LineCounter} ::: {row}')
+                LineCounter += 1
 
     SearchTechnologyList = []
     SearchDomainList = []
@@ -243,46 +253,46 @@ def SearchBySource():
 
     while True:
 
-        print('1 - Вывести список технологий')
-        print('2 - Вывести список доменов')
-        print('3 - Вывести список функций')
-        print('4 - Вывести список атрибутов')
-        print('5 - Вывести список ученых')
-        print('6 - Вывести список источников')
-        print('7 - Вывести список связанных технологий')
-        print('8 - Выгрузить результаты в текстовый файл')
-        print('0 - Вернуться в главное меню')
+        print('Вывести список технологий - 1')
+        print('Вывести список доменов - 2')
+        print('Вывести список функций - 3')
+        print('Вывести список атрибутов - 4')
+        print('Вывести список ученых - 5')
+        print('Вывести список источников - 6')
+        print('Вывести список связанных технологий - 7')
+        print('Выгрузить результаты в текстовый файл - 8')
+        print('Вернуться в главное меню - 0')
 
         SearchCounter = int(input('Введите номер пункта: '))
 
         if SearchCounter == 1:
             print('Технологии:')
             for i in range(0, len(SearchTechnologyList)):
-                print(SearchTechnologyList[i])
+                print(f'{i} ::: {SearchTechnologyList[i]}')
         elif SearchCounter == 2:
             print('Домены:')
             for i in range(0, len(SearchDomainList)):
-                print(SearchDomainList[i])
+                print(f'{i} ::: {SearchDomainList[i]}')
         elif SearchCounter == 3:
             print('Функции:')
             for i in range(0, len(SearchFuncList)):
-                print(SearchFuncList[i])
+                print(f'{i} ::: {SearchFuncList[i]}')
         elif SearchCounter == 4:
             print('Атрибуты:')
             for i in range(0, len(SearchAtributeList)):
-                print(SearchAtributeList[i])
+                print(f'{i} ::: {SearchAtributeList[i]}')
         elif SearchCounter == 5:
             print('Ученые:')
             for i in range(0, len(SearchScientistList)):
-                print(SearchScientistList[i])
+                print(f'{i} ::: {SearchScientistList[i]}')
         elif SearchCounter == 6:
             print('Источники:')
             for i in range(0, len(SearchSourceList)):
-                print(SearchSourceList[i])
+                print(f'{i} ::: {SearchSourceList[i]}')
         elif SearchCounter == 7:
             print('Связанные технологии:')
             for i in range(0, len(SearchConnectTechnologiesList)):
-                print(SearchConnectTechnologiesList[i])
+                print(f'{i} ::: {SearchConnectTechnologiesList[i]}')
         elif SearchCounter == 8:
 
             OutCounterList = []
@@ -346,13 +356,16 @@ def AddNewEntry():
 
 #Поиск совпадение по csv файлу
 def SearchForMatches():
-    print('Поиск совпадений по тегу')
+    print(Fore.LIGHTRED_EX)
+    print('*** Поиск совпадений по базе данных ***')
     while True:
-        print('1 - Поиск совпадений по всем источникам')
-        print('2 - Поиск совпадений по конкретному источнику')
-        print('0 - Вернуться к выбору функций')
+        print(Fore.LIGHTBLUE_EX)
+        print('Поиск совпадений по всем источникам - 1')
+        print('Поиск совпадений по конкретному источнику - 2')
+        print('Вернуться в главное меню - 0')
 
-        SearchCounter = int(input('Введите цифорку: '))
+        print(Fore.LIGHTGREEN_EX)
+        SearchCounter = int(input('Введите номер пункта: '))
 
         if SearchCounter == 1:
             SearchAllDatabase()
@@ -361,17 +374,21 @@ def SearchForMatches():
         elif SearchCounter == 0:
             break
         else:
-            print('Пожалуйста, проверьте корректность ввода')
+            print(Fore.LIGHTRED_EX)
+            print('*** Пожалуйста, проверьте корректность ввода ***')
 
 #Показать содержимое базы данных
 def ShowDatabase():
-    print('Просмотр списка технологий')
+    print(Fore.LIGHTRED_EX)
+    print('*** Просмотр содержимого базы данных ***')
     while True:
-        print('1 - Просмотр всех технологий')
-        print('2 - Просмотр технологий по источнику')
-        print('0 - Вернуться к выбору функций')
+        print(Fore.LIGHTBLUE_EX)
+        print('Просмотр всех технологий - 1')
+        print('Просмотр технологий по источнику - 2')
+        print('Вернуться в главное меню - 0')
 
-        ShowCounter = int(input('Введите цифорку: '))
+        print(Fore.LIGHTGREEN_EX)
+        ShowCounter = int(input('Введите номер пункта: '))
 
         if ShowCounter == 1:
             ShowAllDatabase()
@@ -380,7 +397,8 @@ def ShowDatabase():
         elif ShowCounter == 0:
             break
         else:
-            print('Пожалуйста, проверьте корректность ввода')
+            print(Fore.LIGHTRED_EX)
+            print('*** Пожалуйста, проверьте корректность ввода ***')
 
 #Внести изменения в существующую строку csv файла
 def UpdateCsvRow():
@@ -410,16 +428,20 @@ def UpdateCsvRow():
 
 #Главная исполняемая функция
 def main():
-    print('Программа НИО МАИ 317 по поиску технологий')
+    print(Fore.LIGHTRED_EX, '*** Start work ***')
 
     while True:
-        print('1 - Найти совпадению по атрибутам')
-        print('2 - Добавить новую запись')
-        print('3 - Показать базу данных')
-        print('4 - внести изменения в базу данных')
-        print('0 - выйти из программы')
+        print(Fore.LIGHTRED_EX)
+        print('*** Программа НИО МАИ 317 по поиску технологий ***')
+        print(Fore.LIGHTBLUE_EX)
+        print('Найти совпадения по базе данных - 1')
+        print('Добавить новую запись в базу данных - 2')
+        print('Показать содержимое базы данных - 3')
+        print('Внести изменения в существующую строку базы данных - 4')
+        print('ВЫЙТИ ИЗ ПРОГРАММЫ - 0')
 
-        FirstCounter = int(input('Введите цифорку: '))
+        print(Fore.LIGHTGREEN_EX)
+        FirstCounter = int(input('Введите номер пункта: '))
 
         if FirstCounter == 1:
             SearchForMatches()
